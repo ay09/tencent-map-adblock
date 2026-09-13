@@ -1,0 +1,23 @@
+#!name=腾讯地图去广告
+#!desc=腾讯地图去广告，移除路线页运营 Banner、新人推广及开屏活动。
+#!system=ios
+#!category=去广告
+#!requirement=CORE_VERSION>=20
+
+[Header Rewrite]
+http-request ^https:\/\/mmapgwh\.map\.qq\.com\/+travelplat\/mapcraft\/routeplan\/empty_lines(?:\?.*)?$ header-del unencrypt-response
+http-request ^https:\/\/mmapgwh\.map\.qq\.com\/+travelplat\/mapcraft\/routeplan\/empty_lines(?:\?.*)?$ header-add unencrypt-response 1
+http-request ^https:\/\/mmapgwh\.map\.qq\.com\/+mappush\/routeplan_page_strategy\/get_new_user_flag(?:\?.*)?$ header-del unencrypt-response
+http-request ^https:\/\/mmapgwh\.map\.qq\.com\/+mappush\/routeplan_page_strategy\/get_new_user_flag(?:\?.*)?$ header-add unencrypt-response 1
+
+[Body Rewrite]
+http-response-jq ^https:\/\/mmapgwh\.map\.qq\.com\/+travelplat\/mapcraft\/routeplan\/empty_lines(?:\?.*)?$ '.data.ui_template |= map(select(.templateKey != "multi_route_banner") | if ((.bizData.data.index // -1) > 1) then .bizData.data.index = (.bizData.data.index - 1) else . end)'
+http-response-jq ^https:\/\/mmapgwh\.map\.qq\.com\/+mappush\/routeplan_page_strategy\/get_new_user_flag(?:\?.*)?$ '.data.new_user_flag = 0'
+
+[URL Rewrite]
+^https?:\/\/3gimg\.qq\.com\/tencentMapTouch\/app\/activity\/ _ reject
+^https?:\/\/3gimg\.qq\.com\/tencentMapTouch\/splash\/ _ reject
+^https?:\/\/4gimg\.map\.qq\.com\/mwaSplash\/ _ reject
+
+[MITM]
+hostname = %APPEND% mmapgwh.map.qq.com, 3gimg.qq.com, 4gimg.map.qq.com
