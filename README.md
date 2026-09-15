@@ -33,3 +33,17 @@
 ## License
 
 MIT
+
+
+---
+
+## 航旅纵横去广告
+
+Surge 单文件模块：只拦开屏广告（`sns` + `rpid=1000019`）与 OSS advert 素材；**不拦**首页探索（`1000002`）。
+
+- 模块：[`航旅纵横去广告.sgmodule`](航旅纵横去广告.sgmodule)
+- 脚本：[`umetrip_ads.js`](umetrip_ads.js)（Surge 原生 `$done({ response })`，非 QX status 字符串）
+
+Raw 安装：
+
+`https://raw.githubusercontent.com/ay09/tencent-map-adblock/main/%E8%88%AA%E6%97%85%E7%BA%B5%E6%A8%AA%E5%8E%BB%E5%B9%BF%E5%91%8A.sgmodule`
